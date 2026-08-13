@@ -44,6 +44,9 @@ const RequireAuth  = ({ children }) => {
 };
 const RequireAdmin = ({ children }) => {
   const isAdmin = useAuthStore(s => s.isAdmin)();
+
+  console.log("ADMIN CHECK:", isAdmin);
+
   return isAdmin ? children : <Navigate to="/" replace />;
 };
 const GuestOnly = ({ children }) => {
