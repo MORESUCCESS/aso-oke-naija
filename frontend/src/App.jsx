@@ -43,7 +43,14 @@ const RequireAuth  = ({ children }) => {
   return isLoggedIn ? children : <Navigate to="/login" replace />;
 };
 const RequireAdmin = ({ children }) => {
+  const user = useAuthStore(s => s.user);
   const isAdmin = useAuthStore(s => s.isAdmin)();
+
+  console.log("ADMIN CHECK:", {
+    user,
+    role: user?.role,
+    isAdmin
+  });
 
   return isAdmin ? children : <Navigate to="/" replace />;
 };
