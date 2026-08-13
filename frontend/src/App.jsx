@@ -45,6 +45,8 @@ const RequireAuth  = ({ children }) => {
 const RequireAdmin = ({ children }) => {
   const isAdmin = useAuthStore(s => s.isAdmin)();
 
+  console.log("CURRENT USER:", user);
+  console.log("USER ROLE:", user?.role);
   console.log("ADMIN CHECK:", isAdmin);
 
   return isAdmin ? children : <Navigate to="/" replace />;
