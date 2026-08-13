@@ -1,0 +1,53 @@
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// ── Product image storage ─────────────────────────────────────
+const productStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder:         'asooke-royale/products',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    transformation: [{ width: 1000, height: 1000, crop: 'limit', quality: 'auto' }],
+  },
+});
+
+// ── Category image storage ────────────────────────────────────
+const categoryStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder:         'asooke-royale/categories',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    transformation: [{ width: 800, height: 1000, crop: 'fill', quality: 'auto' }],
+  },
+});
+
+// ── Avatar storage ────────────────────────────────────────────
+const avatarStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder:         'asooke-royale/avatars',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+    transformation: [{ width: 200, height: 200, crop: 'fill', quality: 'auto' }],
+  },
+});
+
+const uploadProduct  = multer({ storage: productStorage,  limits: { fileSize: 5 * 1024 * 1024 } });
+const uploadCategory = multer({ storage: categoryStorage, limits: { fileSize: 5 * 1024 * 1024 } });
+const uploadAvatar   = multer({ storage: avatarStorage,   limits: { fileSize: 2 * 1024 * 1024 } });
+
+const deleteImage = async (publicId) => {
+  try {
+    await cloudinary.uploader.destroy(publicId);
+  } catch (err) {
+    console.error('Cloudinary delete error:', err.message);
+  }
+};
+
+module.exports = { cloudinary, uploadProduct, uploadCategory, uploadAvatar, deleteImage };
