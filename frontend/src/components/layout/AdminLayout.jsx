@@ -19,6 +19,9 @@ const NAV = [
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, logout }              = useAuthStore();
+  console.log('ADMIN USER:', user);
+  console.log('ADMIN ROLE:', user?.role);
+  console.log('IS ADMIN:', ['ADMIN', 'SUPER_ADMIN'].includes(user?.role));
   const navigate                      = useNavigate();
 
   const { data: stats } = useQuery({
